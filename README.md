@@ -1,6 +1,6 @@
 # ProShop eCommerce Platform
 
-> eCommerce platform built with the MERN stack & Redux.
+> Full stack MERN contact manager with React hooks, context and JWT authentication
 
 ## Features
 
