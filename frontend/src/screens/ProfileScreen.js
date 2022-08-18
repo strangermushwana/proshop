@@ -7,6 +7,7 @@ import Loader from '../components/Loader'
 import { getUserDetails, updateUserProfile } from '../actions/userActions'
 import { listMyOrders } from '../actions/orderActions'
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
+import validator from 'validator'
 
 const ProfileScreen = ({ location, history }) => {
   const [name, setName] = useState('')
@@ -46,11 +47,25 @@ const ProfileScreen = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    if (password !== confirmPassword) {
-      setMessage('Passwords do not match')
+    if (validate(password)) {
+      if (password !== confirmPassword) {
+        setMessage('Passwords do not match')
+      } else {
+        dispatch(updateUserProfile({ id: user._id, name, email, password }))
+      }
     } else {
-      dispatch(updateUserProfile({ id: user._id, name, email, password }))
+      setMessage('Password must contain numbers, charaters uppercase and lowercase letters')
     }
+  }
+
+  const validate = (value) => {
+    if (validator.isStrongPassword(value, {
+      minLength: 8, minLowercase: 1,
+      minUppercase: 1, minNumbers: 1, minSymbols: 1
+    })) {
+      return true
+    } 
+    return false
   }
 
   return (
@@ -125,9 +140,12 @@ const ProfileScreen = ({ location, history }) => {
                 <th>ID</th>
                 <th>DATE</th>
                 <th>TOTAL</th>
-                <th>PAID</th>
-                <th>DELIVERED</th>
-                <th></th>
+                {
+
+                  // <th>PAID</th>
+                  // <th>COMPLETED</th>
+                  // <th></th>
+                }
               </tr>
             </thead>
             <tbody>
@@ -136,20 +154,22 @@ const ProfileScreen = ({ location, history }) => {
                   <td>{order._id}</td>
                   <td>{order.createdAt.substring(0, 10)}</td>
                   <td>{order.totalPrice}</td>
-                  <td>
-                    {order.isPaid ? (
-                      order.paidAt.substring(0, 10)
-                    ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
-                    )}
-                  </td>
-                  <td>
-                    {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
-                    ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
-                    )}
-                  </td>
+                 {
+                //   <td>
+                //   {order.isPaid ? (
+                //     order.paidAt.substring(0, 10)
+                //   ) : (
+                //     <i className='fas fa-times' style={{ color: 'red' }}></i>
+                //   )}
+                // </td>
+                // <td>
+                //   {order.isDelivered ? (
+                //     order.deliveredAt.substring(0, 10)
+                //   ) : (
+                //     <i className='fas fa-times' style={{ color: 'red' }}></i>
+                //   )}
+                // </td>
+                 }
                   <td>
                     <LinkContainer to={`/order/${order._id}`}>
                       <Button className='btn-sm' variant='light'>

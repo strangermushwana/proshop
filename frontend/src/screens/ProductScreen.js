@@ -6,6 +6,7 @@ import Rating from '../components/Rating'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import Meta from '../components/Meta'
+import DatePicker from "react-datepicker"
 import {
   listProductDetails,
   createProductReview,
@@ -16,6 +17,7 @@ const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState('')
+  const [startDate, setStartDate] = useState(new Date())
 
   const dispatch = useDispatch()
 
@@ -84,7 +86,7 @@ const ProductScreen = ({ history, match }) => {
                     text={`${product.numReviews} reviews`}
                   />
                 </ListGroup.Item>
-                <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
+                <ListGroup.Item>Price: R{product.price}</ListGroup.Item>
                 <ListGroup.Item>
                   Description: {product.description}
                 </ListGroup.Item>
@@ -97,16 +99,29 @@ const ProductScreen = ({ history, match }) => {
                     <Row>
                       <Col>Price:</Col>
                       <Col>
-                        <strong>${product.price}</strong>
+                        <strong>R{product.price}</strong>
                       </Col>
                     </Row>
                   </ListGroup.Item>
+
+                  {
+
+
+                //   <ListGroup.Item>
+                //   <Row>
+                //     <Col>Date:</Col>
+                //     <Col>
+                //       <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+                //     </Col>
+                //   </Row>
+                // </ListGroup.Item>
+                  }
 
                   <ListGroup.Item>
                     <Row>
                       <Col>Status:</Col>
                       <Col>
-                        {product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}
+                        {product.countInStock > 0 ? 'Available' : 'Not Available'}
                       </Col>
                     </Row>
                   </ListGroup.Item>
@@ -114,7 +129,7 @@ const ProductScreen = ({ history, match }) => {
                   {product.countInStock > 0 && (
                     <ListGroup.Item>
                       <Row>
-                        <Col>Qty</Col>
+                        <Col>People</Col>
                         <Col>
                           <Form.Control
                             as='select'
@@ -141,7 +156,7 @@ const ProductScreen = ({ history, match }) => {
                       type='button'
                       disabled={product.countInStock === 0}
                     >
-                      Add To Cart
+                      Book
                     </Button>
                   </ListGroup.Item>
                 </ListGroup>

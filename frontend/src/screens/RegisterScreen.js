@@ -6,6 +6,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { register } from '../actions/userActions'
+import validator from 'validator'
 
 const RegisterScreen = ({ location, history }) => {
   const [name, setName] = useState('')
@@ -29,11 +30,25 @@ const RegisterScreen = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    if (password !== confirmPassword) {
-      setMessage('Passwords do not match')
+    if (validate(password)) {
+      if (password !== confirmPassword) {
+        setMessage('Passwords do not match')
+      } else {
+        dispatch(register(name, email, password))
+      }
     } else {
-      dispatch(register(name, email, password))
+      setMessage('Password must be atleast 8 characters long, and must contain Uppercase and Lowercase letters, Numbers and Special characters')
     }
+  }
+
+  const validate = (value) => {
+    if (validator.isStrongPassword(value, {
+      minLength: 8, minLowercase: 1,
+      minUppercase: 1, minNumbers: 1, minSymbols: 1
+    })) {
+      return true
+    } 
+    return false
   }
 
   return (

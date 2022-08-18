@@ -91,12 +91,15 @@ const OrderScreen = ({ match, history }) => {
     <Message variant='danger'>{error}</Message>
   ) : (
     <>
-      <h1>Order {order._id}</h1>
+      {
+        // <h1>Order {order._id}</h1>
+      }
+      <h1>Thank you for your order. We will send you an email confirming the details</h1>
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
             <ListGroup.Item>
-              <h2>Shipping</h2>
+              <h2>Details</h2>
               <p>
                 <strong>Name: </strong> {order.user.name}
               </p>
@@ -110,27 +113,31 @@ const OrderScreen = ({ match, history }) => {
                 {order.shippingAddress.postalCode},{' '}
                 {order.shippingAddress.country}
               </p>
-              {order.isDelivered ? (
-                <Message variant='success'>
-                  Delivered on {order.deliveredAt}
-                </Message>
-              ) : (
-                <Message variant='danger'>Not Delivered</Message>
-              )}
+              {
+              //   order.isDelivered ? (
+              //   <Message variant='success'>
+              //     Delivered on {order.deliveredAt}
+              //   </Message>
+              // ) : (
+              //   <Message variant='danger'>Not Delivered</Message>
+              // )
+            }
             </ListGroup.Item>
 
-            <ListGroup.Item>
-              <h2>Payment Method</h2>
-              <p>
-                <strong>Method: </strong>
-                {order.paymentMethod}
-              </p>
-              {order.isPaid ? (
-                <Message variant='success'>Paid on {order.paidAt}</Message>
-              ) : (
-                <Message variant='danger'>Not Paid</Message>
-              )}
-            </ListGroup.Item>
+            {
+            //   <ListGroup.Item>
+            //   <h2>Payment Method</h2>
+            //   <p>
+            //     <strong>Method: </strong>
+            //     {order.paymentMethod}
+            //   </p>
+            //   {order.isPaid ? (
+            //     <Message variant='success'>Paid on {order.paidAt}</Message>
+            //   ) : (
+            //     <Message variant='danger'>Not Paid</Message>
+            //   )}
+            // </ListGroup.Item>
+          }
 
             <ListGroup.Item>
               <h2>Order Items</h2>
@@ -155,7 +162,7 @@ const OrderScreen = ({ match, history }) => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          {item.qty} x R{item.price} = R{item.qty * item.price}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -174,55 +181,66 @@ const OrderScreen = ({ match, history }) => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>${order.itemsPrice}</Col>
+                  <Col>R{order.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Shipping</Col>
-                  <Col>${order.shippingPrice}</Col>
-                </Row>
-              </ListGroup.Item>
+              {
+
+              //   <ListGroup.Item>
+              //   <Row>
+              //     {
+              //       // <Col>Address</Col>
+              //       // <Col>Review{order.shippingPrice}</Col>
+              //     }
+              //   </Row>
+              // </ListGroup.Item>
+              }
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>${order.taxPrice}</Col>
+                  <Col>R{order.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${order.totalPrice}</Col>
+                  <Col>R{order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {!order.isPaid && (
-                <ListGroup.Item>
-                  {loadingPay && <Loader />}
-                  {!sdkReady ? (
-                    <Loader />
-                  ) : (
-                    <PayPalButton
-                      amount={order.totalPrice}
-                      onSuccess={successPaymentHandler}
-                    />
-                  )}
-                </ListGroup.Item>
-              )}
-              {loadingDeliver && <Loader />}
-              {userInfo &&
-                userInfo.isAdmin &&
-                order.isPaid &&
-                !order.isDelivered && (
-                  <ListGroup.Item>
-                    <Button
-                      type='button'
-                      className='btn btn-block'
-                      onClick={deliverHandler}
-                    >
-                      Mark As Delivered
-                    </Button>
-                  </ListGroup.Item>
-                )}
+              {
+              //   !order.isPaid && (
+              //   <ListGroup.Item>
+              //     {loadingPay && <Loader />}
+              //     {!sdkReady ? (
+              //       <Loader />
+              //     ) : (
+              //       <PayPalButton
+              //         amount={order.totalPrice}
+              //         onSuccess={successPaymentHandler}
+              //       />
+              //     )}
+              //   </ListGroup.Item>
+              // )
+            }
+              {
+                // loadingDeliver && <Loader />
+              }
+              {
+                // userInfo &&
+                // userInfo.isAdmin &&
+                // order.isPaid &&
+                // !order.isDelivered && (
+                //   <ListGroup.Item>
+                //     <Button
+                //       type='button'
+                //       className='btn btn-block'
+                //       onClick={deliverHandler}
+                //     >
+                //       Mark As Delivered
+                //     </Button>
+                //   </ListGroup.Item>
+                // )
+              }
             </ListGroup>
           </Card>
         </Col>
