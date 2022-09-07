@@ -55,6 +55,7 @@ const PlaceOrderScreen = ({ history }) => {
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
+        reservedDate: localStorage.getItem('reservedDate'),
       })
     )
   }
@@ -141,6 +142,12 @@ const PlaceOrderScreen = ({ history }) => {
                   <Col>R{cart.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
+              <ListGroup.Item>
+              <Row>
+                <Col>Date</Col>
+                <Col>{localStorage.getItem('reservedDate')}</Col>
+              </Row>
+            </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>

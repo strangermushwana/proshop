@@ -29,6 +29,19 @@ const CartScreen = ({ match, location, history }) => {
     history.push('/login?redirect=shipping')
   }
 
+  const arr = [
+    '1-10',
+    '11-20',
+    '21-30',
+    '31-40',
+    '41-50',
+    '51-60',
+    '61-70',
+    '71-80',
+    '81-90',
+    '91-100'
+  ]
+
   return (
     <Row>
       <Col md={8}>
@@ -49,7 +62,7 @@ const CartScreen = ({ match, location, history }) => {
                     <Link to={`/product/${item.product}`}>{item.name}</Link>
                   </Col>
                   <Col md={2}>R{item.price}</Col>
-                  <Col md={2}>
+                  <Col md={3}>
                     <Form.Control
                       as='select'
                       value={item.qty}
@@ -59,9 +72,9 @@ const CartScreen = ({ match, location, history }) => {
                         )
                       }
                     >
-                      {[...Array(item.countInStock).keys()].map((x) => (
-                        <option key={x + 1} value={x + 1}>
-                          {x + 1}
+                      {arr.map((x, index) => (
+                        <option key={index} value={index + 1}>
+                          {x}
                         </option>
                       ))}
                     </Form.Control>
@@ -86,7 +99,11 @@ const CartScreen = ({ match, location, history }) => {
           <ListGroup variant='flush'>
             <ListGroup.Item>
               <h2>
-                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+              {
+
+                // ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+              }
+                Subtotal
               </h2>
               R
               {cartItems

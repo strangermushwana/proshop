@@ -30,6 +30,10 @@ const orderSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    reservedDate: {
+      type: String,
+      required: true,
+    },
     paymentResult: {
       id: { type: String },
       status: { type: String },

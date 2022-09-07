@@ -1,5 +1,7 @@
 import asyncHandler from 'express-async-handler'
+import moment from 'moment'
 import Order from '../models/orderModel.js'
+import nodemailer from 'nodemailer'
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -13,6 +15,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     taxPrice,
     shippingPrice,
     totalPrice,
+    reservedDate,
   } = req.body
 
   if (orderItems && orderItems.length === 0) {
@@ -28,14 +31,48 @@ const addOrderItems = asyncHandler(async (req, res) => {
       itemsPrice,
       taxPrice,
       shippingPrice,
+      reservedDate,
       totalPrice,
     })
 
     const createdOrder = await order.save()
 
     res.status(201).json(createdOrder)
+    sendEmail(req.user.email, req.user.name, reservedDate)
+    
   }
 })
+
+const sendEmail = async (email, name, reservedDate) => {
+  const transporter = nodemailer.createTransport({
+      host: 'smtp.hostinger.in',
+      port: 587,
+      secure: false,
+      auth: {
+          user: 'ulgrouptwelve@zeldus.com',
+          pass: 'Caprel@Kuca@2020',
+      }
+  });
+  await transporter.sendMail({
+      from: 'ulgrouptwelve@zeldus.com',
+      to: email,
+      subject: 'Order Confrimation | The Smart Decor',
+      html: `
+      <p>Hi ${name},</p>
+      <br>
+      <p>Thank you, we've recieved your order.</p>
+      <br>
+      <p>Our team is busy making preparations, we are excited to meet you.</p>
+      <br>
+      <p>The date for our meetup is <strong>${moment(reservedDate).format('dddd, MMMM Do YYYY')}</strong>.</p>
+      <br>
+      <br>
+      <br>
+      <p>Regards,</p>
+      <p>The Smart Decor Team</p>`,
+  });
+}
+
 
 // @desc    Get order by ID
 // @route   GET /api/orders/:id
@@ -114,6 +151,14 @@ const getOrders = asyncHandler(async (req, res) => {
   res.json(orders)
 })
 
+// @desc    get all orders
+// @route   GET /api/odi
+// @access  Public
+const getOrdersView = asyncHandler(async (req, res) => {
+  const orders = await Order.find({}).populate('user', 'id name')
+  res.json(orders)
+})
+
 export {
   addOrderItems,
   getOrderById,
@@ -121,4 +166,5 @@ export {
   updateOrderToDelivered,
   getMyOrders,
   getOrders,
+  getOrdersView,
 }

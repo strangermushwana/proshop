@@ -45,7 +45,7 @@ const ShippingScreen = ({ history }) => {
             placeholder='Enter city'
             value={city}
             required
-            onChange={(e) => setCity(e.target.value)}
+            onChange={(e) => setCity(e.target.value.replace(/[^a-z ]/gi, ''))}
           ></Form.Control>
         </Form.Group>
 
@@ -56,7 +56,7 @@ const ShippingScreen = ({ history }) => {
             placeholder='Enter postal code'
             value={postalCode}
             required
-            onChange={(e) => setPostalCode(e.target.value)}
+            onChange={(e) => setPostalCode(e.target.value.replace(/\D/g, ''))}
           ></Form.Control>
         </Form.Group>
 
@@ -67,7 +67,7 @@ const ShippingScreen = ({ history }) => {
             placeholder='Enter country'
             value={country}
             required
-            onChange={(e) => setCountry(e.target.value)}
+            onChange={(e) => setCountry(e.target.value.replace(/[^a-z ]/gi, ''))}
           ></Form.Control>
         </Form.Group>
 

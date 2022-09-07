@@ -202,6 +202,12 @@ const OrderScreen = ({ match, history }) => {
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
+              <Row>
+                <Col>Date</Col>
+                <Col>{localStorage.getItem('reservedDate')}</Col>
+              </Row>
+            </ListGroup.Item>
+              <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
                   <Col>R{order.totalPrice}</Col>

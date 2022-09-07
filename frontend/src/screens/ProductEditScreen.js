@@ -112,7 +112,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='name'
                 placeholder='Enter name'
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value.replace(/[^a-z ]/gi, ''))}
               ></Form.Control>
             </Form.Group>
 
@@ -122,7 +122,14 @@ const ProductEditScreen = ({ match, history }) => {
                 type='number'
                 placeholder='Enter price'
                 value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={(e) => {
+                  const p = e.target.value
+                  if (Math.abs(p) === 0) {
+                    setPrice('')
+                  } else {
+                    setPrice(Math.abs(p))
+                  }
+                }}
               ></Form.Control>
             </Form.Group>
 
@@ -159,19 +166,45 @@ const ProductEditScreen = ({ match, history }) => {
                 type='number'
                 placeholder='Number of people'
                 value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
+                onChange={(e) => {
+                  const cc = e.target.value
+                  if ((Math.abs(cc) >=1 && Math.abs(cc) <= 10)) {
+                    setCountInStock(cc)
+                  }
+                }}
               ></Form.Control>
             </Form.Group>
 
             <Form.Group controlId='category'>
-              <Form.Label>Category</Form.Label>
+            <Form.Label>Category</Form.Label>
               <Form.Control
-                type='text'
-                placeholder='Enter category'
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              ></Form.Control>
+              as='select'
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {['One', 'Two', 'Three'].map(
+                (x, index) => (
+                  <option key={index} value={x}>
+                    {x}
+                  </option>
+                )
+              )}
+            </Form.Control>
             </Form.Group>
+
+            {
+
+            //   <Form.Group controlId='category'>
+            //   <Form.Label>Category</Form.Label>
+            //   <Form.Control
+            //     type='text'
+            //     placeholder='Enter category'
+            //     value={category}
+            //     onChange={(e) => setCategory(e.target.value.replace(/[^a-z ]/gi, ''))}
+            //   ></Form.Control>
+            // </Form.Group>
+
+            }
 
             <Form.Group controlId='description'>
               <Form.Label>Description</Form.Label>
@@ -179,7 +212,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='text'
                 placeholder='Enter description'
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => setDescription(e.target.value.replace(/[^a-z ]/gi, ''))}
               ></Form.Control>
             </Form.Group>
 

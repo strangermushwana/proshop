@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
@@ -6,7 +7,7 @@ import Rating from '../components/Rating'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import Meta from '../components/Meta'
-import DatePicker from "react-datepicker"
+import moment from "moment"
 import {
   listProductDetails,
   createProductReview,
@@ -16,13 +17,16 @@ import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
   const [rating, setRating] = useState(0)
+  const [validDate, setValidDate] = useState(false)
   const [comment, setComment] = useState('')
-  const [startDate, setStartDate] = useState(new Date())
+  const [dateSelected, setDateSelected] = useState()
+  const [message, setMessage] = useState(null)
 
   const dispatch = useDispatch()
 
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error, product } = productDetails
+  
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -43,7 +47,7 @@ const ProductScreen = ({ history, match }) => {
       dispatch(listProductDetails(match.params.id))
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
     }
-  }, [dispatch, match, successProductReview])
+  }, [dispatch, match, successProductReview, dateSelected])
 
   const addToCartHandler = () => {
     history.push(`/cart/${match.params.id}?qty=${qty}`)
@@ -59,6 +63,50 @@ const ProductScreen = ({ history, match }) => {
     )
   }
 
+  let ordersFetched = []
+
+  const fetchOrders = async () => {
+    const { data } = await axios.get(
+      `/api/orders/odi`
+    )
+    ordersFetched = [...data]
+  }
+
+  fetchOrders()
+
+  const handleDateChange = (e) => {
+    setDateSelected(e)
+    setMessage(null)
+    if (e < moment().format('YYYY-MM-DD')) {
+      setValidDate(false)
+      setMessage('Date is in the past, Please select a future date.')
+    } else {
+      const found = ordersFetched.findIndex((orderF) => (orderF.reservedDate === e) && (orderF.orderItems.map((r) => r.product).includes(product._id)))
+      if (found !== -1) {
+        setValidDate(false)
+        setMessage('The date has been reserved for the same product, please choose a different date')
+      } else {
+        localStorage.setItem('reservedDate', e)
+        setValidDate(true)
+        setMessage(null)
+      }
+
+    }
+  }
+
+  const arr = [
+    '1-10',
+    '11-20',
+    '21-30',
+    '31-40',
+    '41-50',
+    '51-60',
+    '61-70',
+    '71-80',
+    '81-90',
+    '91-100'
+  ]
+
   return (
     <>
       <Link className='btn btn-light my-3' to='/'>
@@ -71,6 +119,7 @@ const ProductScreen = ({ history, match }) => {
       ) : (
         <>
           <Meta title={product.name} />
+          {message && <Message variant='danger'>{message}</Message>}
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />
@@ -104,19 +153,6 @@ const ProductScreen = ({ history, match }) => {
                     </Row>
                   </ListGroup.Item>
 
-                  {
-
-
-                //   <ListGroup.Item>
-                //   <Row>
-                //     <Col>Date:</Col>
-                //     <Col>
-                //       <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
-                //     </Col>
-                //   </Row>
-                // </ListGroup.Item>
-                  }
-
                   <ListGroup.Item>
                     <Row>
                       <Col>Status:</Col>
@@ -130,31 +166,51 @@ const ProductScreen = ({ history, match }) => {
                     <ListGroup.Item>
                       <Row>
                         <Col>People</Col>
-                        <Col>
+                        <Row>
+                          <Col>
                           <Form.Control
                             as='select'
                             value={qty}
-                            onChange={(e) => setQty(e.target.value)}
+                            onChange={(e) => {
+                              setQty( e.target.value)
+                            }}
                           >
-                            {[...Array(product.countInStock).keys()].map(
-                              (x) => (
-                                <option key={x + 1} value={x + 1}>
-                                  {x + 1}
+                            {arr.map(
+                              (x,index) => (
+                                <option key={index} value={index +1}>
+                                  {x}
                                 </option>
                               )
                             )}
                           </Form.Control>
-                        </Col>
+                          </Col>
+                        </Row>
                       </Row>
                     </ListGroup.Item>
                   )}
+
+                  <ListGroup.Item>
+                  <Row>
+                    <Col>Date:</Col>
+                    <Col>
+                      <Form.Control
+                        type="date"
+                        value={dateSelected}
+                        onChange={(e) => {
+                          handleDateChange( e.target.value)
+                        }}
+                        >
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
 
                   <ListGroup.Item>
                     <Button
                       onClick={addToCartHandler}
                       className='btn-block'
                       type='button'
-                      disabled={product.countInStock === 0}
+                      disabled={product.countInStock === 0 || !validDate }
                     >
                       Book
                     </Button>
