@@ -17,7 +17,7 @@ const ProductEditScreen = ({ match, history }) => {
   const [image, setImage] = useState('')
   const [brand, setBrand] = useState('')
   const [category, setCategory] = useState('')
-  const [countInStock, setCountInStock] = useState(0)
+  const [countInStock, setCountInStock] = useState(100)
   const [description, setDescription] = useState('')
   const [uploading, setUploading] = useState(false)
 
@@ -46,7 +46,7 @@ const ProductEditScreen = ({ match, history }) => {
         setImage(product.image)
         setBrand(product.brand)
         setCategory(product.category)
-        setCountInStock(product.countInStock)
+        setCountInStock(100)
         setDescription(product.description)
       }
     }
@@ -90,6 +90,12 @@ const ProductEditScreen = ({ match, history }) => {
       })
     )
   }
+
+  const hide = false
+
+  const themes = [
+    'Black', 'Pink and White', 'Blue and Yellow', 'Brown and Cream', 'Indigo and White', 'Light blue and Radiant Yellow', 'Shades of Gray', 'Muted green', 'Peach and White', 'Shades of purple'
+  ]
 
   return (
     <>
@@ -153,27 +159,36 @@ const ProductEditScreen = ({ match, history }) => {
             <Form.Group controlId='brand'>
               <Form.Label>Theme</Form.Label>
               <Form.Control
-                type='text'
-                placeholder='Enter the theme'
+                as='select'
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-              ></Form.Control>
+              >
+              {themes.map(
+                (x, index) => (
+                  <option key={index} value={x}>
+                    {x}
+                  </option>
+                )
+              )}
+              </Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='countInStock'>
+            {hide && <Form.Group controlId='countInStock'>
               <Form.Label>Max people</Form.Label>
               <Form.Control
                 type='number'
                 placeholder='Number of people'
-                value={countInStock}
+                value={100}
                 onChange={(e) => {
                   const cc = e.target.value
-                  if ((Math.abs(cc) >=1 && Math.abs(cc) <= 10)) {
-                    setCountInStock(cc)
-                  }
+                  setCountInStock(cc)
+                  // if ((Math.abs(cc) >=1 && Math.abs(cc) <= 10)) {
+                  //   setCountInStock(cc)
+                  // }
                 }}
               ></Form.Control>
             </Form.Group>
+              }
 
             <Form.Group controlId='category'>
             <Form.Label>Category</Form.Label>
@@ -182,7 +197,7 @@ const ProductEditScreen = ({ match, history }) => {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
-              {['One', 'Two', 'Three'].map(
+              {['Wedding','Parties', 'Funeral', 'Traditional'].map(
                 (x, index) => (
                   <option key={index} value={x}>
                     {x}

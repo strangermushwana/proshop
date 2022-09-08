@@ -20,11 +20,14 @@ import ProductListScreen from './screens/ProductListScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
 
+// style={{ backgroundImage:`url(${"https://images.pexels.com/photos/2524366/pexels-photo-2524366.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"})` }}
+
 const App = () => {
   const pathname = window.location.pathname
   return (
     <Router>
       <Header />
+      
       <main className='py-3'>
         <Container>
           <Route path='/order/:id' component={OrderScreen} />

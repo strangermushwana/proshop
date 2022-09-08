@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import Product from '../components/Product'
@@ -16,6 +16,7 @@ const HomeScreen = ({ match }) => {
   const pageNumber = match.params.pageNumber || 1
 
   const dispatch = useDispatch()
+  // https://images.pexels.com/photos/1616113/pexels-photo-1616113.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2
 
   const productList = useSelector((state) => state.productList)
   const { loading, error, products, page, pages } = productList
@@ -25,7 +26,7 @@ const HomeScreen = ({ match }) => {
   }, [dispatch, keyword, pageNumber])
 
   return (
-    <>
+    <div style={{ backgroundImage:`url(${"https://images.pexels.com/photos/1616113/pexels-photo-1616113.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"})` }}>
       <Meta />
       {!keyword ? (
         <ProductCarousel />
@@ -34,7 +35,7 @@ const HomeScreen = ({ match }) => {
           Go Back
         </Link>
       )}
-      <h1>Latest Products</h1>
+      <h1 style={{color: 'white'}}>Latest Products</h1>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -55,7 +56,7 @@ const HomeScreen = ({ match }) => {
           />
         </>
       )}
-    </>
+    </div>
   )
 }
 
