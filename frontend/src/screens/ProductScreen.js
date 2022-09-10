@@ -148,7 +148,7 @@ const ProductScreen = ({ history, match }) => {
                     <Row>
                       <Col>Price:</Col>
                       <Col>
-                        <strong>R{product.price}</strong>
+                        <strong>R{product.price} per interval excluding tax</strong>
                       </Col>
                     </Row>
                   </ListGroup.Item>

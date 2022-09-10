@@ -49,12 +49,12 @@ const sendEmail = async (email, name, reservedDate) => {
       port: 587,
       secure: false,
       auth: {
-          user: 'ulgrouptwelve@zeldus.com',
-          pass: 'Caprel@Kuca@2020',
+          user: process.env.MY_EMAIL,
+          pass: process.env.PASSWORD,
       }
   });
   await transporter.sendMail({
-      from: 'ulgrouptwelve@zeldus.com',
+      from: process.env.MY_EMAIL,
       to: email,
       subject: 'Order Confrimation | The Smart Decor',
       html: `
